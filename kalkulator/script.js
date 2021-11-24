@@ -1,5 +1,3 @@
-const calculatorElement = document.getElementById('calculator');
-
 class Calculator {
   constructor(previousInput, currentInput, signInput) {
     this.previousInput = previousInput;
@@ -20,8 +18,13 @@ class Calculator {
     if (number === '.' && this.currentInput.textContent === '') {
       return currentInput.textContent = '0.';
     }
-    
-    this.currentInput.textContent = this.currentInput.textContent + number.toString();
+
+    if (this.signInput.textContent === '') {
+      this.currentInput.textContent += number.toString();
+    } else {
+      this.currentInput.textContent = '';
+      this.currentInput.textContent += number.toString();
+    }
 
   }
 
@@ -43,13 +46,9 @@ class Calculator {
 
     previousInput.textContent = this.currentInput.textContent;
     this.signInput.textContent = operation;
-    this.currentInput.textContent = '';
   }
 
   doMath() {
-    // console.log(this.currentInput.textContent)
-    // console.log(this.previousInput.textContent)
-    // if (this.currentInput.textContent === '' || this.previousInput.textContent === '') return;
     let result;
     const prev = Number(this.previousInput.textContent);
     const current = Number(this.currentInput.textContent);
@@ -73,16 +72,15 @@ class Calculator {
     }
 
     if (isNaN(result)) {
-      this.currentInput.textContent;
-      return;
+      return this.currentInput.textContent;
     }
 
     this.currentInput.textContent = result;
     this.previousInput.textContent = result;
-    this.signInput.textContent = '';
   }
 }
 
+const calculatorElement = document.getElementById('calculator');
 const previousInput = document.querySelector('#previousInput');
 const currentInput = document.querySelector('#currentInput');
 const signInput = document.querySelector('#sign');
