@@ -62,6 +62,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
 .previous-input,
 .operation {
   display: inline-block;
+  height: 18px;
   font-size: 1.3rem;
   font-weight: 300;
   margin-bottom: 10px;
@@ -69,6 +70,7 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
 
 .current-input {
   font-size: 3rem;
+  height: 42px;
 }
 
 .buttons {
@@ -116,11 +118,11 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
 }
 
 .equals-btn:hover {
-  background-color: #d15b6f;
+  background-color: #df7486;
 }
 
 .equals-btn:focus {
-  background-color: #ad3a4d;
+  background-color: #d17181;
 }
 
 .zero-btn {
