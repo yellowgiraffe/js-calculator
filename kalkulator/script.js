@@ -7,7 +7,7 @@ class Calculator {
   }
 
   showInputNumbers(number) {
-    if (this.currentInput.textContent == '0') {
+    if (this.currentInput.textContent === '0') {
       this.currentInput.textContent = '';
     }
 
@@ -16,7 +16,8 @@ class Calculator {
     }
 
     if (number === '.' && this.currentInput.textContent === '') {
-      return currentInput.textContent = '0.';
+      this.currentInput.textContent = '0.';
+      return;
     }
 
     if (this.signInput.textContent === '') {
@@ -25,7 +26,6 @@ class Calculator {
       this.currentInput.textContent = '';
       this.currentInput.textContent += number.toString();
     }
-
   }
 
   clear() {
@@ -38,13 +38,13 @@ class Calculator {
     if (this.currentInput.textContent === '0' && operation === '-') {
       this.currentInput.textContent = '-';
       return;
-    } 
+    }
 
     if (this.signInput.textContent !== '') {
       this.doMath();
     }
 
-    previousInput.textContent = this.currentInput.textContent;
+    this.previousInput.textContent = this.currentInput.textContent;
     this.signInput.textContent = operation;
   }
 
@@ -54,7 +54,7 @@ class Calculator {
     const current = Number(this.currentInput.textContent);
     const operator = this.signInput.textContent;
 
-    switch(operator) {
+    switch (operator) {
       case '+':
         result = prev + current;
         break;
@@ -71,16 +71,16 @@ class Calculator {
         return;
     }
 
-    if (isNaN(result)) {
-      return this.currentInput.textContent;
+    if (Number.isNaN(result)) {
+      return;
     }
 
     this.currentInput.textContent = result;
-    this.previousInput.textContent = result;
+    this.previousInput.textContent = this.currentInput.textContent;
+    this.signInput.textContent = '';
   }
 }
 
-const calculatorElement = document.getElementById('calculator');
 const previousInput = document.querySelector('#previousInput');
 const currentInput = document.querySelector('#currentInput');
 const signInput = document.querySelector('#sign');
@@ -100,7 +100,7 @@ numberBtns.forEach((button) => {
 operationBtns.forEach((button) => {
   button.addEventListener('click', () => {
     calculator.chooseOperation(button.textContent);
-  })
+  });
 });
 
 equalsBtn.addEventListener('click', () => {
@@ -111,8 +111,4 @@ clearBtn.addEventListener('click', () => {
   calculator.clear();
 });
 
-
-
-
-
-
+module.exports = Calculator;

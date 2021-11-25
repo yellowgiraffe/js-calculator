@@ -1,0 +1,28 @@
+{
+  "name": "exercise-7-nasa-calculator-team-404",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint kalkulator/",
+    "lint:fix": "eslint --fix src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pl-incode/exercise-7-nasa-calculator-team-404.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pl-incode/exercise-7-nasa-calculator-team-404/issues"
+  },
+  "homepage": "https://github.com/pl-incode/exercise-7-nasa-calculator-team-404#readme",
+  "devDependencies": {
+    "eslint": "^8.3.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "jest": "^27.3.1"
+  }
+}
