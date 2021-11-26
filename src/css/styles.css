@@ -63,14 +63,14 @@ h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
 .operation {
   display: inline-block;
   height: 18px;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 300;
-  margin-bottom: 10px;
 }
 
 .current-input {
   font-size: 3rem;
-  height: 42px;
+  overflow-wrap: break-word;
+  padding-top: 10px;
 }
 
 .buttons {

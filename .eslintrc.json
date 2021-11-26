@@ -12,6 +12,7 @@
         "ecmaVersion": 12
     },
     "rules": {
-      "linebreak-style": "off"
+      "linebreak-style": "off",
+      "import/extensions": "never"
     }
 }
