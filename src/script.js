@@ -23,7 +23,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const equalsBtn = document.getElementById('equals');
   equalsBtn.addEventListener('click', () => {
-    calculator.showResult();
+    calculator.equials();
   });
 
   const clearBtn = document.getElementById('clear');

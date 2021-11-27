@@ -15,17 +15,31 @@ export default class Calculator {
       return;
     }
 
-    if (number === '.' && this.currentInput.textContent === '') {
-      this.currentInput.textContent = '0.';
+    if (number === '.' && this.currentInput.textContent === ''
+    || number === '.' && this.currentInput.textContent === '-') {
+      this.currentInput.textContent = '-0.';
       return;
     }
 
-    if (this.signInput.textContent === '') {
-      this.currentInput.textContent += number.toString();
-    } else {
-      this.currentInput.textContent = '';
-      this.currentInput.textContent += number.toString();
-    }
+    // this.currentInput.textContent += number.toString();
+
+    // To dziala dla jednej liczby
+    // if (this.signInput.textContent === '') {
+    //   this.currentInput.textContent += number.toString();
+    // } 
+    // else {
+    //   this.currentInput.textContent = '';
+    //   this.currentInput.textContent += number.toString();
+    // }
+
+    // Dziala dla dwóch cyfr, ale nie dziala 2 + 22
+    if (this.currentInput.textContent === this.previousInput.textContent 
+      && this.signInput.textContent !== '') {
+        this.currentInput.textContent = '';
+        this.currentInput.textContent += number.toString();
+      } else {
+        this.currentInput.textContent += number.toString();
+      }
   }
 
   clear() {
@@ -84,8 +98,15 @@ export default class Calculator {
 
   showResult() {
     const result = this.doMath();
-    this.currentInput.textContent = result;
     this.previousInput.textContent = this.currentInput.textContent;
+    this.currentInput.textContent = result || '0';
+    this.signInput.textContent = '';
+  }
+
+  equials() {
+    const result = this.doMath();
+    this.previousInput.textContent += ` ${this.signInput.textContent} ${this.currentInput.textContent} =` ;
+    this.currentInput.textContent = result || '0';
     this.signInput.textContent = '';
   }
 }
