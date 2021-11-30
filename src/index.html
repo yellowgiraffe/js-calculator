@@ -16,39 +16,39 @@
   <main class="main">
     <div class="calculator" id="calculator">
 
-      <div class="display" id="output">
+      <div class="display" id="display">
         <div class="previous-input" id="previousInput"></div>
         <div class="operation" id="sign"></div>
         <div class="current-input" id="currentInput">0</div>
       </div>
 
-      <div class="buttons">
-        <button class="button sign-btn" data-operation id="plus">+</button>
-        <button class="button sign-btn" data-operation id="minus">-</button>
-        <button class="button sign-btn" data-operation id="multiply">×</button>
-        <button class="button sign-btn" data-operation id="divide">÷</button>
+      <div class="buttons" id="buttons">
+        <button class="button sign-btn" data-button="operator" id="plus">+</button>
+        <button class="button sign-btn" data-button="operator" id="minus">-</button>
+        <button class="button sign-btn" data-button="operator" id="multiply">×</button>
+        <button class="button sign-btn" data-button="operator" id="divide">÷</button>
 
-        <button class="button equals-btn" data-equals id="equals">=</button>
-        <button class="button num-btn" data-number id="7">7</button>
-        <button class="button num-btn" data-number id="8">8</button>
-        <button class="button num-btn" data-number id="9">9</button>
+        <button class="button equals-btn" data-button="equals" id="equals">=</button>
+        <button class="button num-btn" data-button="number" id="seven">7</button>
+        <button class="button num-btn" data-button="number" id="eight">8</button>
+        <button class="button num-btn" data-button="number" id="nine">9</button>
 
-        <button class="button num-btn" data-number id="4">4</button>
-        <button class="button num-btn" data-number id="5">5</button>
-        <button class="button num-btn" data-number id="6">6</button>
+        <button class="button num-btn" data-button="number" id="four">4</button>
+        <button class="button num-btn" data-button="number" id="five">5</button>
+        <button class="button num-btn" data-button="number" id="six">6</button>
 
-        <button class="button num-btn" data-number id="1">1</button>
-        <button class="button num-btn" data-number id="2">2</button>
-        <button class="button num-btn" data-number id="3">3</button>
+        <button class="button num-btn" data-button="number" id="one">1</button>
+        <button class="button num-btn" data-button="number" id="two">2</button>
+        <button class="button num-btn" data-button="number" id="three">3</button>
 
-        <button class="button num-btn zero-btn" data-number id="0">0</button>
-        <button class="button" data-number id="dot">.</button>
-        <button class="button" data-clear id="clear">C</button>
+        <button class="button num-btn zero-btn"  data-button="number" id="zero">0</button>
+        <button class="button"  data-button="number" id="dot">.</button>
+        <button class="button" data-button="clear" id="clear">C</button>
       </div>
         
     </div>
   </main>
-  <script type="module" src="script.js" ></script>
+  <script type="module" src="main.js" ></script>
 </body>
 
 </html>
