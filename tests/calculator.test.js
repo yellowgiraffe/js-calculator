@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-undef */
 import fs from 'fs';
 import { dirname } from 'path';
 import { jest } from '@jest/globals';
@@ -293,8 +291,4 @@ describe('Show clicked button on display', () => {
 
     expect(currentInput.textContent).toBe(`${calc.currentNumber}`);
   });
-
-  test('', () => {});
-
-  test('', () => {});
 });

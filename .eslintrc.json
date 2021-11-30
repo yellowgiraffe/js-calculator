@@ -13,6 +13,9 @@
     },
     "rules": {
       "linebreak-style": "off",
-      "import/extensions": "off"
+      "import/extensions": "off",
+      "consistent-return": "off",
+      "no-underscore-dangle": "off",
+      "no-undef": "off"
     }
 }

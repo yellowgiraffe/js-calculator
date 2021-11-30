@@ -1,9 +1,3 @@
-/* eslint-disable consistent-return */
-
-// TO DO
-// Wyświetl komunikat "Nie można dzileić przez zero"
-// Zablokój klikanie przycisków + - * /, kiedy jeden był właśnie kliknięty
-// Dodaj nowy przycisk, zeby wprowadzać ujemne liczby
 export default class Calculator {
   constructor() {
     this.currentInput = document.querySelector('#currentInput');
@@ -36,7 +30,6 @@ export default class Calculator {
           break;
         case 'equals':
           this.showResult();
-          // this.previousNumber += ` ${this.operator} ${this.currentNumber} =`;
           this.previousNumber = '';
           break;
         case 'clear':
@@ -70,42 +63,6 @@ export default class Calculator {
       return;
     }
 
-    // if (this.currentInput.textContent === '0') {
-    //   this.currentInput.textContent = '';
-    // }
-
-    // if (number === '.' && this.currentInput.textContent.includes('.')) {
-    //   return;
-    // }
-
-    // if (number === '.' && this.currentInput.textContent === '') {
-    //   this.currentInput.textContent = '0.';
-    //   return;
-    // }
-
-    // if (number === '.' && this.currentInput.textContent === '-') {
-    //   this.currentInput.textContent = '-0.';
-    //   return;
-    // }
-
-    // To dziala dla jednej liczby
-    // if (this.signInput.textContent === '') {
-    //   this.currentInput.textContent += number.toString();
-    // }
-    // else {
-    //   this.currentInput.textContent = '';
-    //   this.currentInput.textContent += number.toString();
-    // }
-
-    // Dziala dla dwóch cyfr, ale nie dziala 2 + 22
-    // if (this.currentInput.textContent === this.previousInput.textContent
-    //   && this.signInput.textContent !== '') {
-    //     this.currentInput.textContent = '';
-    //     this.currentInput.textContent += number.toString();
-    //   } else {
-    //     this.currentInput.textContent += number.toString();
-    //   }
-
     if (this.currentNumber === this.previousNumber && this.operator !== '') {
       this.currentNumber = '';
       this.currentNumber += number.toString();
@@ -127,6 +84,7 @@ export default class Calculator {
 
     this.previousNumber = this.currentNumber;
     this.operator = operation;
+    this.isWaitingForSecondOperand = true;
   }
 
   doMath() {
