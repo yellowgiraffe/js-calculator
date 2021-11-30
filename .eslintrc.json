@@ -13,6 +13,6 @@
     },
     "rules": {
       "linebreak-style": "off",
-      "import/extensions": "never"
+      "import/extensions": "off"
     }
 }

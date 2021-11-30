@@ -2,8 +2,8 @@
 
 // TO DO
 // Wyświetl komunikat "Nie można dzileić przez zero"
-// Dodaj możliwość wpisywania ujemnej liczby jako drugi operand
 // Zablokój klikanie przycisków + - * /, kiedy jeden był właśnie kliknięty
+// Dodaj nowy przycisk, zeby wprowadzać ujemne liczby
 export default class Calculator {
   constructor() {
     this.currentInput = document.querySelector('#currentInput');
@@ -18,7 +18,7 @@ export default class Calculator {
   }
 
   listenToButtons() {
-    this.keys.addEventListener('click', event => {
+    this.keys.addEventListener('click', (event) => {
       const { target } = event;
 
       if (!target.matches('button')) {
@@ -27,101 +27,126 @@ export default class Calculator {
 
       const buttonType = target.getAttribute('data-button');
 
-      switch(buttonType) {
+      switch (buttonType) {
         case 'number':
-          this.showInputNumbers(target.textContent);
+          this.chooseNumber(target.textContent);
           break;
         case 'operator':
           this.chooseOperator(target.textContent);
           break;
         case 'equals':
-          this.equals();
+          this.showResult();
+          // this.previousNumber += ` ${this.operator} ${this.currentNumber} =`;
+          this.previousNumber = '';
           break;
         case 'clear':
-          this.reset()
+          this.reset();
           break;
+        default:
+          return;
       }
+
+      this.updateDisplay();
     });
   }
 
-  showInputNumbers(number) {
-    if (this.currentInput.textContent === '0') {
-      this.currentInput.textContent = '';
+  updateDisplay() {
+    this.currentInput.textContent = this.currentNumber;
+    this.previousInput.textContent = this.previousNumber;
+    this.signInput.textContent = this.operator;
+  }
+
+  chooseNumber(number) {
+    if (this.currentNumber === '0') {
+      this.currentNumber = '';
     }
 
-    if (number === '.' && this.currentInput.textContent.includes('.')) {
+    if (number === '.' && this.currentNumber.includes('.')) {
       return;
     }
 
-    if (number === '.' && this.currentInput.textContent === '') {
-      this.currentInput.textContent = '0.';
+    if (number === '.' && this.currentNumber === '') {
+      this.currentNumber = '0.';
       return;
     }
 
-    if (number === '.' && this.currentInput.textContent === '-') {
-      this.currentInput.textContent = '-0.';
-      return;
-    }
+    // if (this.currentInput.textContent === '0') {
+    //   this.currentInput.textContent = '';
+    // }
 
-    // this.currentInput.textContent += number.toString();
+    // if (number === '.' && this.currentInput.textContent.includes('.')) {
+    //   return;
+    // }
+
+    // if (number === '.' && this.currentInput.textContent === '') {
+    //   this.currentInput.textContent = '0.';
+    //   return;
+    // }
+
+    // if (number === '.' && this.currentInput.textContent === '-') {
+    //   this.currentInput.textContent = '-0.';
+    //   return;
+    // }
 
     // To dziala dla jednej liczby
     // if (this.signInput.textContent === '') {
     //   this.currentInput.textContent += number.toString();
-    // } 
+    // }
     // else {
     //   this.currentInput.textContent = '';
     //   this.currentInput.textContent += number.toString();
     // }
 
     // Dziala dla dwóch cyfr, ale nie dziala 2 + 22
-    if (this.currentInput.textContent === this.previousInput.textContent 
-      && this.signInput.textContent !== '') {
-        this.currentInput.textContent = '';
-        this.currentInput.textContent += number.toString();
-      } else {
-        this.currentInput.textContent += number.toString();
-      }
+    // if (this.currentInput.textContent === this.previousInput.textContent
+    //   && this.signInput.textContent !== '') {
+    //     this.currentInput.textContent = '';
+    //     this.currentInput.textContent += number.toString();
+    //   } else {
+    //     this.currentInput.textContent += number.toString();
+    //   }
+
+    if (this.currentNumber === this.previousNumber && this.operator !== '') {
+      this.currentNumber = '';
+      this.currentNumber += number.toString();
+    } else {
+      this.currentNumber += number.toString();
+    }
   }
 
   reset() {
-    this.currentInput.textContent = '0';
-    this.previousInput.textContent = '';
-    this.signInput.textContent = '';
+    this.currentNumber = '0';
+    this.previousNumber = '';
+    this.operator = '';
   }
 
   chooseOperator(operation) {
-    if (this.currentInput.textContent === '0' && operation === '-') {
-      this.currentInput.textContent = '-';
-      return;
-    }
-
-    if (this.signInput.textContent !== '') {
+    if (this.operator !== '') {
       this.showResult();
     }
 
-    this.previousInput.textContent = this.currentInput.textContent;
-    this.signInput.textContent = operation;
+    this.previousNumber = this.currentNumber;
+    this.operator = operation;
   }
 
   doMath() {
     let result;
-    const prev = Number(this.previousInput.textContent);
-    const current = Number(this.currentInput.textContent);
-    const operator = this.signInput.textContent;
+    const prev = Number(this.previousNumber);
+    const curr = Number(this.currentNumber);
+    const sign = this.operator;
 
-    switch (operator) {
+    switch (sign) {
       case '+':
-        result = prev + current;
+        result = prev + curr;
         break;
       case '-':
-        result = prev - current;
+        result = prev - curr;
         break;
       case '×':
-        result = prev * current;
+        result = prev * curr;
         break;
       case '÷':
-        result = prev / current;
+        result = prev / curr;
         break;
       default:
         return;
@@ -140,16 +165,8 @@ export default class Calculator {
 
   showResult() {
     const result = this.doMath();
-    this.previousInput.textContent = this.currentInput.textContent;
-    this.currentInput.textContent = result || '0';
-    this.signInput.textContent = '';
-  }
-
-  equals() {
-    const result = this.doMath();
-    console.log(result);
-    this.previousInput.textContent += ` ${this.signInput.textContent} ${this.currentInput.textContent} =` ; // 9 + 1 =
-    this.currentInput.textContent = result || '0';
-    this.signInput.textContent = '';
+    this.currentNumber = result || '0';
+    this.previousNumber = this.currentNumber;
+    this.operator = '';
   }
 }

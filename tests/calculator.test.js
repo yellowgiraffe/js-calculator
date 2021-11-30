@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-undef */
 import fs from 'fs';
 import { dirname } from 'path';
@@ -10,13 +11,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const simulateClick = (el) => {
   el.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-}
+};
 
 let calc = null;
 let html = null;
 
 beforeAll(() => {
-  html = fs.readFileSync(__dirname + '/../src/index.html', 'utf8');
+  html = fs.readFileSync(`${__dirname}/../src/index.html`, 'utf8');
 });
 
 beforeEach(() => {
@@ -52,213 +53,248 @@ describe('Init method', () => {
   });
 });
 
-describe('Call function after button is clicked', () => {
-  let buttonSpyFn;
-
+describe('Reset method', () => {
   beforeEach(() => {
     calc.init();
   });
 
-  test('should call showInputNumbers after number button is clicked', () => {
-    buttonSpyFn = jest.spyOn(calc, 'showInputNumbers');
+  test('should change values to default', () => {
+    calc.reset();
+    expect(calc.currentNumber).toBe('0');
+    expect(calc.previousNumber).toBe('');
+    expect(calc.operator).toBe('');
+  });
+});
+
+describe('Call function after button is clicked', () => {
+  let buttonSpyFn;
+  let updateDisplayFn;
+
+  beforeEach(() => {
+    calc.init();
+    updateDisplayFn = jest.spyOn(calc, 'updateDisplay');
+  });
+
+  test('should call chooseNumber after number button is clicked', () => {
+    buttonSpyFn = jest.spyOn(calc, 'chooseNumber');
     const numberBtn = document.querySelector('[data-button="number"]');
 
     simulateClick(numberBtn);
 
     expect(buttonSpyFn).toHaveBeenCalled();
     expect(buttonSpyFn).toHaveBeenCalledWith(numberBtn.textContent);
+    expect(updateDisplayFn).toHaveBeenCalled();
   });
 
   test('should call chooseOperator after operation button is clicked', () => {
     buttonSpyFn = jest.spyOn(calc, 'chooseOperator');
     const operatorBtn = document.querySelector('[data-button="operator"]');
-    
+
     simulateClick(operatorBtn);
-    
+
     expect(buttonSpyFn).toHaveBeenCalled();
     expect(buttonSpyFn).toHaveBeenCalledWith(operatorBtn.textContent);
+    expect(updateDisplayFn).toHaveBeenCalled();
   });
 
-  test('should call equals function after equals button is clicked', () => {
-    buttonSpyFn = jest.spyOn(calc, 'equals');
+  test('should call showResult function after equals button is clicked', () => {
+    buttonSpyFn = jest.spyOn(calc, 'showResult');
     const equalsBtn = document.querySelector('[data-button="equals"]');
 
     simulateClick(equalsBtn);
 
     expect(buttonSpyFn).toHaveBeenCalled();
+    expect(updateDisplayFn).toHaveBeenCalled();
+  });
+
+  test('should call showResult function if operation button is clicked ????????????', () => {
+    buttonSpyFn = jest.spyOn(calc, 'showResult');
+    const equalsBtn = document.querySelector('[data-button="equals"]');
+
+    simulateClick(equalsBtn);
+
+    expect(buttonSpyFn).toHaveBeenCalled();
+    expect(updateDisplayFn).toHaveBeenCalled();
   });
 
   test('should call reset function after clear button is clicked', () => {
     buttonSpyFn = jest.spyOn(calc, 'reset');
     const clearBtn = document.querySelector('[data-button="clear"]');
-    
+
     simulateClick(clearBtn);
-    
+
     expect(buttonSpyFn).toHaveBeenCalled();
+    expect(updateDisplayFn).toHaveBeenCalled();
   });
-
-  // test('displays number after click', async () => {
-  //   const btnOne = document.querySelector('#one');
-  //   const currentInput = document.querySelector('#currentInput');
-  //   await btnOne.click();
-  //   expect(currentInput.textContent).toEqual('1');
-  // });
-
-  // test('should call equals function', () => {
-  //   previousInput = 5;
-  //   currentInput = 7;
-  //   const equals = document.querySelector('#equals');
-  //   equals.click();
-  //   expect(equalsFn).toHaveBeenCalled();
-  // });
 });
 
-
 describe('Calculate mathematics operations', () => {
-  document.body.innerHTML = `<div id="previousInput">21</div>'
-  + '<div id="currentInput">3</div>'
-  + '<div id="sign">+</div>`;
-  let previousInput;
-  let currentInput;
-  let signInput;
-  let calc;
-
-  test('schould be defined', () => {
-    document.body.innerHTML = '<div id="previousInput">21</div>'
-    + '<div id="currentInput">3</div>'
-    + '<div id="sign">+</div>';
-    previousInput = document.querySelector('#previousInput');
-    currentInput = document.querySelector('#currentInput');
-    signInput = document.querySelector('#sign');
-    calc = new Calculator(previousInput, currentInput, signInput);
-
-    expect(calc.doMath).toBeDefined();
-    expect(calc.doMath).not.toBeUndefined();
+  beforeEach(() => {
+    calc.init();
   });
 
-  test('add 21 to 3', () => {
-    document.body.innerHTML = '<div id="previousInput">21</div>'
-    + '<div id="currentInput">3</div>'
-    + '<div id="sign">+</div>';
-    previousInput = document.querySelector('#previousInput');
-    currentInput = document.querySelector('#currentInput');
-    signInput = document.querySelector('#sign');
-    calc = new Calculator(previousInput, currentInput, signInput);
+  test('schould be defined', () => {
+    expect(calc.doMath).toBeDefined();
+  });
 
+  test('should add numbers if operator is +', () => {
+    calc.previousNumber = '21';
+    calc.currentNumber = '3';
+    calc.operator = '+';
     expect(calc.doMath()).toBe(24);
   });
 
-  test('add 17.2 to 3.5', () => {
-    document.body.innerHTML = '<div id="previousInput">17.2</div>'
-    + '<div id="currentInput">3.5</div>'
-    + '<div id="sign">+</div>';
-    previousInput = document.querySelector('#previousInput');
-    currentInput = document.querySelector('#currentInput');
-    signInput = document.querySelector('#sign');
-    calc = new Calculator(previousInput, currentInput, signInput);
-
-    expect(calc.doMath()).toBe(20.7);
-  });
-
-  test('add -14 to 9', () => {
-    document.body.innerHTML = '<div id="previousInput">-14</div>'
-    + '<div id="currentInput">9</div>'
-    + '<div id="sign">+</div>';
-    previousInput = document.querySelector('#previousInput');
-    currentInput = document.querySelector('#currentInput');
-    signInput = document.querySelector('#sign');
-    calc = new Calculator(previousInput, currentInput, signInput);
-
-    expect(calc.doMath()).toBe(-5);
-  });
-
-  test('subtract 12 from 7', () => {
-    document.body.innerHTML = '<div id="previousInput">12</div>'
-    + '<div id="currentInput">7</div>'
-    + '<div id="sign">-</div>';
-    previousInput = document.querySelector('#previousInput');
-    currentInput = document.querySelector('#currentInput');
-    signInput = document.querySelector('#sign');
-    calc = new Calculator(previousInput, currentInput, signInput);
+  test('should subtract numbers if operator is -', () => {
+    calc.previousNumber = '12';
+    calc.currentNumber = '7';
+    calc.operator = '-';
     expect(calc.doMath()).toBe(5);
   });
 
-  test('subtract 55.5 from 50.1', () => {
-    document.body.innerHTML = '<div id="previousInput">55.5</div>'
-    + '<div id="currentInput">50.1</div>'
-    + '<div id="sign">-</div>';
-    previousInput = document.querySelector('#previousInput');
-    currentInput = document.querySelector('#currentInput');
-    signInput = document.querySelector('#sign');
-    calc = new Calculator(previousInput, currentInput, signInput);
-    expect(calc.doMath()).toBe(5.4);
-  });
-
-  test('multiply 4 by 11', () => {
-    document.body.innerHTML = '<div id="previousInput">4</div>'
-    + '<div id="currentInput">11</div>'
-    + '<div id="sign">×</div>';
-    previousInput = document.querySelector('#previousInput');
-    currentInput = document.querySelector('#currentInput');
-    signInput = document.querySelector('#sign');
-    calc = new Calculator(previousInput, currentInput, signInput);
+  test('should multiply numbers if operator is ×', () => {
+    calc.previousNumber = '4';
+    calc.currentNumber = '11';
+    calc.operator = '×';
     expect(calc.doMath()).toBe(44);
   });
 
-  test('multiply 16.2 by 0.5', () => {
-    document.body.innerHTML = '<div id="previousInput">16.2</div>'
-    + '<div id="currentInput">0.5</div>'
-    + '<div id="sign">×</div>';
-    previousInput = document.querySelector('#previousInput');
-    currentInput = document.querySelector('#currentInput');
-    signInput = document.querySelector('#sign');
-    calc = new Calculator(previousInput, currentInput, signInput);
-    expect(calc.doMath()).toBe(8.1);
-  });
-
-  test('divide 60 by 10', () => {
-    document.body.innerHTML = '<div id="previousInput">60</div>'
-    + '<div id="currentInput">10</div>'
-    + '<div id="sign">÷</div>';
-    previousInput = document.querySelector('#previousInput');
-    currentInput = document.querySelector('#currentInput');
-    signInput = document.querySelector('#sign');
-    calc = new Calculator(previousInput, currentInput, signInput);
+  test('should divide numbers if operator is ÷', () => {
+    calc.previousNumber = '60';
+    calc.currentNumber = '10';
+    calc.operator = '÷';
     expect(calc.doMath()).toBe(6);
   });
 
-  test('divide 14 by 3', () => {
-    document.body.innerHTML = '<div id="previousInput">14</div>'
-    + '<div id="currentInput">3</div>'
-    + '<div id="sign">÷</div>';
-    previousInput = document.querySelector('#previousInput');
-    currentInput = document.querySelector('#currentInput');
-    signInput = document.querySelector('#sign');
-    calc = new Calculator(previousInput, currentInput, signInput);
+  test('should return undefined if operand is not a number type', () => {
+    calc.previousNumber = 'Hello';
+    calc.currentNumber = '3';
+    calc.operator = '÷';
+    expect(calc.doMath()).toBeUndefined();
+  });
+
+  test('should return undefined if operator is not a math sign', () => {
+    calc.previousNumber = 'Hello';
+    calc.currentNumber = '3';
+    calc.operator = '';
+    expect(calc.doMath()).toBeUndefined();
+  });
+
+  test('should return result with max 8 decimal places', () => {
+    calc.previousNumber = '14';
+    calc.currentNumber = '3';
+    calc.operator = '÷';
     expect(calc.doMath()).toBe(4.66666667);
   });
 });
 
-// test('Default value of calculator schould be zero', () => {
-//   const currentValue = document.querySelector('#currentInput');
-//   expect(currentValue.text()).toEqual('0');
-// });
+describe('Show clicked button on display', () => {
+  beforeEach(() => {
+    calc.init();
+  });
 
-// const { assert } = require('console');
-// const fs = require('fs')
-// const $ = require('jquery');
+  test('should change default current value to value of clicked button', () => {
+    const currentInput = document.querySelector('#currentInput');
+    const numberBtn = document.querySelector('[data-button="number"]');
 
-// 'use strict';
+    simulateClick(numberBtn);
 
-// test('verify if test is visible and the color is correct', () => {
-//     // given (settery, ustawimy test)
-//     const data = fs.readFileSync(__dirname + '/../index.html', 'utf8')
-//     document.body.innerHTML = data;
+    expect(currentInput.textContent).toBe(`${numberBtn.textContent}`);
+  });
 
-//     // when
-//     const e = $('#main');
+  test('should add new number on display when current value is not default value', () => {
+    calc.currentNumber = '9';
+    const currentInput = document.querySelector('#currentInput');
+    const numberBtn = document.querySelector('[data-button="number"]');
 
-//     // then
-//     expect(e.text()).toEqual('Witajcie Kochani');
-//     expect(e.css('color')).toEqual('brown');
-// });
+    simulateClick(numberBtn);
+
+    expect(currentInput.textContent).toBe(`9${numberBtn.textContent}`);
+  });
+
+  test('should change operator sign on display', () => {
+    const signInput = document.querySelector('#sign');
+    const operatorBtn = document.querySelector('[data-button="operator"]');
+
+    simulateClick(operatorBtn);
+
+    expect(signInput.textContent).toBe(`${operatorBtn.textContent}`);
+  });
+
+  test('should calculate and display results after equals button is clicked', () => {
+    const currentInput = document.querySelector('#currentInput');
+    const previousInput = document.querySelector('#previousInput');
+    const signInput = document.querySelector('#sign');
+    const operatorBtn = document.querySelector('#minus');
+    const equalsBtn = document.querySelector('#equals');
+    const numberSix = document.querySelector('#six');
+    const numberTwo = document.querySelector('#two');
+
+    simulateClick(numberSix);
+    simulateClick(operatorBtn);
+    simulateClick(numberTwo);
+    simulateClick(equalsBtn);
+
+    expect(currentInput.textContent).toBe('4');
+    expect(previousInput.textContent).toBe('');
+    expect(signInput.textContent).toBe('');
+  });
+
+  test('should calculate and display result if more then one operator was used in calculation', () => {
+    const currentInput = document.querySelector('#currentInput');
+    const previousInput = document.querySelector('#previousInput');
+    const signInput = document.querySelector('#sign');
+    const operatorBtn = document.querySelector('#minus');
+    const numberBtns = document.querySelectorAll('[data-button="number"]');
+
+    simulateClick(numberBtns[5]);
+    simulateClick(operatorBtn);
+    simulateClick(numberBtns[3]);
+    simulateClick(operatorBtn);
+
+    expect(currentInput.textContent).toBe('2');
+    expect(previousInput.textContent).toBe(currentInput.textContent);
+    expect(signInput.textContent).toBe(operatorBtn.textContent);
+  });
+
+  test('should reset all values on display', () => {
+    const currentInput = document.querySelector('#currentInput');
+    const previousInput = document.querySelector('#previousInput');
+    const signInput = document.querySelector('#sign');
+    const operatorBtn = document.querySelector('#divide');
+    const numberSix = document.querySelector('#six');
+    const numberTwo = document.querySelector('#two');
+    const clearBtn = document.querySelector('#clear');
+
+    simulateClick(numberSix);
+    simulateClick(operatorBtn);
+    simulateClick(numberTwo);
+    simulateClick(clearBtn);
+
+    expect(currentInput.textContent).toBe('0');
+    expect(previousInput.textContent).toBe('');
+    expect(signInput.textContent).toBe('');
+  });
+
+  test('should display "0." when dot botton is clicked as the first one', () => {
+    calc.currentNumber = '0';
+    const currentInput = document.querySelector('#currentInput');
+    const dotBtn = document.querySelector('#dot');
+
+    simulateClick(dotBtn);
+
+    expect(currentInput.textContent).toBe(`0${dotBtn.textContent}`);
+  });
+
+  test('should not allow to input two dots', () => {
+    calc.currentNumber = '25.5';
+    const dotBtn = document.querySelector('#dot');
+
+    simulateClick(dotBtn);
+
+    expect(currentInput.textContent).toBe(`${calc.currentNumber}`);
+  });
+
+  test('', () => {});
+
+  test('', () => {});
+});
