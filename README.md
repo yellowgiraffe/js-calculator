@@ -1,6 +1,8 @@
 # Calculator && Jest Testing
 Vanilla JavaScript calculator tested with unit and integration tests
 
+Demo: https://yellowgiraffe.github.io/js-calculator/
+
 ![calculator](https://user-images.githubusercontent.com/59971064/148568854-005829f8-f210-4591-a694-7ce66becfa42.png)
 
 ## How to test
